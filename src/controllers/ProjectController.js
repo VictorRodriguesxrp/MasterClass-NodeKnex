@@ -18,8 +18,8 @@ module.exports = {
         .join('users', 'users.id', '=', 'projects.user_id')
         .select('projects.*', 'users.username')
         .where('user_id', user_id)
-        .where('users.deleted_at', null);
-
+        .where('users.deleted_at', null)
+        .where('projects.deleted_at', null);
         countObj
         .where('user_id', user_id)
       }
@@ -47,6 +47,35 @@ module.exports = {
       return res.status(201).send();
     } catch (error) {
       next(error);
+    }
+  },
+  async update(req, res, next) {
+    try {
+      const { id }  = req.params;
+      const { title, user_id } = req.body;
+
+      await knex('projects')
+      .update( {title, user_id} )
+      .where('id', id)
+
+      res.status(200).send();
+
+    } catch (error) {
+      next(error);
+    }
+  },
+  async delete(req, res, next) {
+    try {
+      const { id } = req.params;
+
+      await knex('projects')
+      .where('id', id)
+      .update('deleted_at', new Date());
+
+      res.status(200).send();
+
+    } catch (error) {
+      next (error) 
     }
   }
 }

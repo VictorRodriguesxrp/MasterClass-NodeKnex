@@ -50,8 +50,7 @@ module.exports = {
 
       await knex('users')
       .where('id', id)
-      .del();
-      // .update('deleted_at', new Date());
+      .update('deleted_at', new Date());
 
       res.status(200).send();
 
