@@ -18,6 +18,7 @@ module.exports = {
         .join('users', 'users.id', '=', 'projects.user_id')
         .select('projects.*', 'users.username')
         .where('user_id', user_id)
+        .where('users.deleted_at', null);
 
         countObj
         .where('user_id', user_id)
@@ -26,7 +27,7 @@ module.exports = {
       const results = await query;
 
       const [count] = await countObj;
-      
+
       res.header('X-Total-Count', count["count"]);
 
       return res.json(results);
