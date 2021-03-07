@@ -2,8 +2,17 @@ const knex = require("../database")
 
 module.exports = {
   async index (req, res) {
-    const results = await knex('users')
+    const { id } = req.query;
+
+    const query = knex('users')
     .where('deleted_at', null);
+
+    if (id) {
+      query
+      .where('id', id)
+    }
+
+    const results =  await query
 
     return res.json(results);
   },
